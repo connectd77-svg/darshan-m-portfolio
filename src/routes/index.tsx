@@ -28,6 +28,7 @@ import {
   Users,
   X,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -190,7 +191,7 @@ function Portfolio() {
               </div>
             </article>
             <div className="grid grid-cols-2 gap-3">
-              {[["Teaching & Academic Work", BookOpen, "Concept to classroom"], ["Data Analysis", BarChart3, "Data to decisions"], ["Student Projects", Users, "Ideas to outcomes"], ["Technical Content", FileText, "Knowledge to resources"]].map(([label, Icon, caption]) => (
+              {([["Teaching & Academic Work", BookOpen, "Concept to classroom"], ["Data Analysis", BarChart3, "Data to decisions"], ["Student Projects", Users, "Ideas to outcomes"], ["Technical Content", FileText, "Knowledge to resources"]] as Array<[string, LucideIcon, string]>).map(([label, Icon, caption]) => (
                 <article key={String(label)} className="metric-card">
                   <Icon className="h-6 w-6 text-primary" />
                   <h3>{String(label)}</h3><p>{String(caption)}</p>
@@ -257,7 +258,7 @@ function Portfolio() {
               <div className="mt-auto"><p className="placeholder-label">FILE PLACEHOLDER</p><Button variant="premium" size="lg" className="mt-3 w-full" onClick={() => alert("Replace this placeholder with Darshan’s resume PDF.")}><Download /> Download Resume</Button></div>
             </div>
             <div className="grid gap-8 p-6 sm:p-9 md:grid-cols-2">
-              {[ ["Education", "Add degree, institution, and graduation year.", GraduationCap], ["Teaching Experience", "Add roles, institutions, subjects, and dates.", BriefcaseBusiness], ["Technical Skills", "Programming, data science, databases, AI, and tools.", Code2], ["Projects", "Academic systems, data analysis, web, and AI work.", TerminalSquare], ["Certifications", "Add verified certifications and faculty development.", FileText], ["Achievements", "Add awards, publications, and measurable outcomes.", Sparkles] ].map(([title, text, Icon]) => <div key={String(title)} className="resume-item"><Icon /><div><h3>{String(title)}</h3><p>{String(text)}</p></div></div>)}
+              {([ ["Education", "Add degree, institution, and graduation year.", GraduationCap], ["Teaching Experience", "Add roles, institutions, subjects, and dates.", BriefcaseBusiness], ["Technical Skills", "Programming, data science, databases, AI, and tools.", Code2], ["Projects", "Academic systems, data analysis, web, and AI work.", TerminalSquare], ["Certifications", "Add verified certifications and faculty development.", FileText], ["Achievements", "Add awards, publications, and measurable outcomes.", Sparkles] ] as Array<[string, string, LucideIcon]>).map(([title, text, Icon]) => <div key={title} className="resume-item"><Icon /><div><h3>{title}</h3><p>{text}</p></div></div>)}
             </div>
           </div>
         </Section>
@@ -267,7 +268,7 @@ function Portfolio() {
             <div className="contact-panel">
               <h3 className="font-display text-2xl font-extrabold">Connect with Darshan</h3>
               <p className="mt-3 text-sm leading-6 text-muted-foreground">Contact details and social URLs below are clearly marked placeholders. Replace them with verified information before publishing.</p>
-              <div className="mt-7 space-y-3">{[[Mail, "Email", "your.email@example.com — replace"], [Linkedin, "LinkedIn", "Profile URL — replace"], [Github, "GitHub", "Profile URL — replace"], [Instagram, "Instagram", "Profile URL — replace"], [MapPin, "Location", "Karnataka, India"]].map(([Icon, label, value]) => <div key={String(label)} className="contact-row"><Icon /><div><span>{String(label)}</span><p>{String(value)}</p></div></div>)}</div>
+              <div className="mt-7 space-y-3">{([[Mail, "Email", "your.email@example.com — replace"], [Linkedin, "LinkedIn", "Profile URL — replace"], [Github, "GitHub", "Profile URL — replace"], [Instagram, "Instagram", "Profile URL — replace"], [MapPin, "Location", "Karnataka, India"]] as Array<[LucideIcon, string, string]>).map(([Icon, label, value]) => <div key={label} className="contact-row"><Icon /><div><span>{label}</span><p>{value}</p></div></div>)}</div>
               <SocialLinks />
             </div>
             <form className="panel grid gap-5 p-6 sm:p-8" onSubmit={submitContact}>
@@ -316,5 +317,5 @@ function Field({ label, name, type = "text", placeholder }: { label: string; nam
 }
 
 function SocialLinks({ compact = false }: { compact?: boolean }) {
-  return <div className={cn("flex items-center gap-2", !compact && "mt-7")} aria-label="Social media links">{[[Github, "GitHub"], [Linkedin, "LinkedIn"], [Instagram, "Instagram"], [Mail, "Email"]].map(([Icon, label]) => <a key={String(label)} href="#contact" className={cn(buttonVariants({ variant: "outline", size: "icon" }), "rounded-full")} aria-label={`${String(label)} placeholder link`} title={`${String(label)} — replace URL`}><Icon /></a>)}</div>;
+  return <div className={cn("flex items-center gap-2", !compact && "mt-7")} aria-label="Social media links">{([[Github, "GitHub"], [Linkedin, "LinkedIn"], [Instagram, "Instagram"], [Mail, "Email"]] as Array<[LucideIcon, string]>).map(([Icon, label]) => <a key={label} href="#contact" className={cn(buttonVariants({ variant: "outline", size: "icon" }), "rounded-full")} aria-label={`${label} placeholder link`} title={`${label} — replace URL`}><Icon /></a>)}</div>;
 }
