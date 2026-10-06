@@ -1,7 +1,7 @@
 # Roadmap
 
 - [x] Link GitHub connection to this project
-- [ ] Build "GitHub work" section fed by live repositories (server-side gateway call)
-- [ ] Hosting on GitHub: confirm what GitHub Pages can and cannot serve for this app; report options
+- [x] Build "GitHub work" section fed by live repositories (server-side gateway call)
+- [x] Hosting on GitHub: assessed — code already syncs to a private repo; Pages cannot run this server-rendered app. Reported options to user.
 - [ ] Google Drive: connection not linked (user skipped) — CV/documents hosting and visitor file uploads blocked until linked
-- [ ] Code backup to GitHub: verify sync is pushing to the repository
+- [ ] User decision: keep Lovable hosting, or build a static GitHub Pages version (loses live GitHub section)
