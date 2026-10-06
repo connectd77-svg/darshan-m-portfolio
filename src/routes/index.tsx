@@ -1,3 +1,5 @@
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -13,6 +15,7 @@ import {
   ExternalLink,
   FileText,
   Github,
+  GitFork,
   GraduationCap,
   Instagram,
   Linkedin,
@@ -23,6 +26,7 @@ import {
   Presentation,
   Send,
   Sparkles,
+  Star,
   Sun,
   TerminalSquare,
   Users,
@@ -32,6 +36,7 @@ import type { LucideIcon } from "lucide-react";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 
 import { Button, buttonVariants } from "@/components/ui/button";
+import { getGithubProfile } from "@/lib/github.functions";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
@@ -55,7 +60,7 @@ export const Route = createFileRoute("/")({
   component: Portfolio,
 });
 
-const navItems = ["Home", "About", "Skills", "Projects", "Analytics", "Academics", "Certifications", "Resume", "Contact"];
+const navItems = ["Home", "About", "Skills", "Projects", "GitHub", "Analytics", "Academics", "Certifications", "Resume", "Contact"];
 
 const skills = [
   { title: "Programming", icon: Code2, level: "Core practice", items: ["Python", "Java", "JavaScript", "PHP", "SQL", "HTML", "CSS"], bar: "w-4/5" },
@@ -223,6 +228,8 @@ function Portfolio() {
           </div>
         </Section>
 
+        <GithubSection />
+
         <Section id="analytics" eyebrow="Data analyst profile" title="Turning raw data into a clear story." intro="A disciplined workflow spanning data preparation, exploration, visualization, and decision-ready reporting.">
           <div className="grid items-center gap-10 lg:grid-cols-[.8fr_1.2fr]">
             <div>
@@ -287,6 +294,74 @@ function Portfolio() {
         </div>
       </footer>
     </div>
+  );
+}
+
+function GithubSection() {
+  const fetchProfile = useServerFn(getGithubProfile);
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["github-profile"],
+    queryFn: () => fetchProfile(),
+    staleTime: 5 * 60 * 1000,
+  });
+
+  return (
+    <Section id="github" eyebrow="Open source" title="Code published on GitHub." intro="Repositories load live from GitHub, so this section grows as new work is published.">
+      {isLoading && (
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {[0, 1, 2].map((key) => <div key={key} className="panel h-48 animate-pulse" aria-hidden="true" />)}
+        </div>
+      )}
+
+      {isError && (
+        <p className="panel p-6 text-sm leading-6 text-muted-foreground" role="status">
+          GitHub work couldn&apos;t be loaded just now. Please check back shortly.
+        </p>
+      )}
+
+      {data && (
+        <>
+          <div className="panel mb-6 flex flex-wrap items-center gap-6 p-6">
+            {data.avatarUrl && (
+              <img src={data.avatarUrl} alt={`${data.displayName} on GitHub`} className="h-16 w-16 shrink-0 rounded-full border border-border object-cover" />
+            )}
+            <div className="min-w-0 flex-1">
+              <h3 className="font-display text-xl font-extrabold">{data.displayName}</h3>
+              <p className="mt-1 text-sm leading-6 text-muted-foreground">{data.bio}</p>
+            </div>
+            <div className="flex items-center gap-7 text-center">
+              <div><span className="block font-display text-2xl font-extrabold">{data.publicRepos}</span><span className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">Repos</span></div>
+              <div><span className="block font-display text-2xl font-extrabold">{data.followers}</span><span className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">Followers</span></div>
+            </div>
+            <a href={data.url} target="_blank" rel="noreferrer" className={buttonVariants({ variant: "outline" })}>View profile <ExternalLink /></a>
+          </div>
+
+          {data.repos.length === 0 ? (
+            <p className="panel p-6 text-sm leading-6 text-muted-foreground">
+              No public repositories yet — published work will appear here automatically.
+            </p>
+          ) : (
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {data.repos.map((repo) => (
+                <a key={repo.url} href={repo.url} target="_blank" rel="noreferrer" className="project-card block p-5 sm:p-6">
+                  <div className="flex items-start justify-between gap-3">
+                    <Github className="h-5 w-5 shrink-0 text-primary" />
+                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-muted-foreground">{repo.language}</span>
+                  </div>
+                  <h3 className="mt-4 font-display text-lg font-extrabold">{repo.name}</h3>
+                  <p className="mt-2 line-clamp-3 text-sm leading-6 text-muted-foreground">{repo.description}</p>
+                  <div className="mt-5 flex items-center gap-4 text-xs text-muted-foreground">
+                    <span className="flex items-center gap-1"><Star className="h-3.5 w-3.5" />{repo.stars}</span>
+                    <span className="flex items-center gap-1"><GitFork className="h-3.5 w-3.5" />{repo.forks}</span>
+                    {repo.updated && <span className="ml-auto">{new Date(repo.updated).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}</span>}
+                  </div>
+                </a>
+              ))}
+            </div>
+          )}
+        </>
+      )}
+    </Section>
   );
 }
 
