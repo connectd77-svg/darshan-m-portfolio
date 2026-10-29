@@ -36,6 +36,7 @@ import type { LucideIcon } from "lucide-react";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 
 import { Button, buttonVariants } from "@/components/ui/button";
+import portraitAsset from "@/assets/darshan-portrait.png.asset.json";
 import { getGithubProfile } from "@/lib/github.functions";
 import { cn } from "@/lib/utils";
 
@@ -135,7 +136,7 @@ function Portfolio() {
       <header className={cn("site-header", scrolled && "site-header-compact")}>
         <div className="mx-auto grid h-full max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-5 lg:px-8">
           <a href="#home" className="flex min-w-0 items-center gap-3" aria-label="Darshan M, home">
-            <span className="brand-mark">DM</span>
+            <span className="portrait-avatar" aria-hidden="true"><img src={portraitAsset.url} alt="" loading="eager" /></span>
             <span className="min-w-0">
               <span className="block truncate font-display text-sm font-extrabold">DARSHAN M</span>
               <span className="hidden text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground sm:block">Educator · Analyst</span>
@@ -195,13 +196,16 @@ function Portfolio() {
                 {["Teaching: programming, databases & web", "Technical: analytics, software & AI", "Research: data-driven learning systems", "Approach: practical, curious & student-first"].map((item) => <div key={item} className="flex items-start gap-3 rounded-md bg-muted/60 p-4 text-sm"><Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />{item}</div>)}
               </div>
             </article>
-            <div className="grid grid-cols-2 gap-3">
-              {([["Teaching & Academic Work", BookOpen, "Concept to classroom"], ["Data Analysis", BarChart3, "Data to decisions"], ["Student Projects", Users, "Ideas to outcomes"], ["Technical Content", FileText, "Knowledge to resources"]] as Array<[string, LucideIcon, string]>).map(([label, Icon, caption]) => (
-                <article key={String(label)} className="metric-card">
-                  <Icon className="h-6 w-6 text-primary" />
-                  <h3>{String(label)}</h3><p>{String(caption)}</p>
-                </article>
-              ))}
+            <div className="grid content-start gap-3">
+              <figure className="portrait-card"><img src={portraitAsset.url} alt="Darshan M, Assistant Professor and Data Analyst" width={1145} height={1374} loading="lazy" /><figcaption><span>Darshan M</span><span>Karnataka, India</span></figcaption></figure>
+              <div className="grid grid-cols-2 gap-3">
+                {([["Teaching & Academic Work", BookOpen, "Concept to classroom"], ["Data Analysis", BarChart3, "Data to decisions"], ["Student Projects", Users, "Ideas to outcomes"], ["Technical Content", FileText, "Knowledge to resources"]] as Array<[string, LucideIcon, string]>).map(([label, Icon, caption]) => (
+                  <article key={String(label)} className="metric-card">
+                    <Icon className="h-6 w-6 text-primary" />
+                    <h3>{String(label)}</h3><p>{String(caption)}</p>
+                  </article>
+                ))}
+              </div>
             </div>
           </div>
         </Section>
@@ -261,7 +265,7 @@ function Portfolio() {
         <Section id="resume" eyebrow="Resume" title="Experience at a glance." intro="A concise preview of the academic and technical profile behind the work.">
           <div className="resume-shell">
             <div className="resume-side">
-              <span className="brand-mark brand-mark-large">DM</span><h3>Darshan M</h3><p>Assistant Professor<br />Data Analyst<br />Computer Science Educator</p>
+              <span className="resume-portrait"><img src={portraitAsset.url} alt="Darshan M" width={1145} height={1374} loading="lazy" /></span><h3>Darshan M</h3><p>Assistant Professor<br />Data Analyst<br />Computer Science Educator</p>
               <div className="mt-auto"><p className="placeholder-label">FILE PLACEHOLDER</p><Button variant="premium" size="lg" className="mt-3 w-full" onClick={() => alert("Replace this placeholder with Darshan’s resume PDF.")}><Download /> Download Resume</Button></div>
             </div>
             <div className="grid gap-8 p-6 sm:p-9 md:grid-cols-2">
@@ -370,9 +374,9 @@ function Section({ id, eyebrow, title, intro, children }: { id: string; eyebrow:
 }
 
 function TechVisual() {
-  return <div className="tech-visual" aria-label="Animated illustration connecting education, code, data, and AI" role="img">
-    <div className="visual-grid" /><div className="orbit orbit-one" /><div className="orbit orbit-two" />
-    <div className="core-node"><BrainCircuit /><span>DARSHAN</span><small>TEACH · ANALYZE · BUILD</small></div>
+  return <div className="tech-visual">
+    <div className="visual-grid" aria-hidden="true" /><div className="orbit orbit-one" aria-hidden="true" /><div className="orbit orbit-two" aria-hidden="true" />
+    <div className="portrait-core"><img src={portraitAsset.url} alt="Darshan M, Assistant Professor and Data Analyst" width={1145} height={1374} loading="eager" /></div>
     <div className="float-node node-code"><Code2 /><span>CODE</span></div><div className="float-node node-data"><BarChart3 /><span>DATA</span></div><div className="float-node node-learn"><GraduationCap /><span>LEARN</span></div>
     <div className="visual-caption"><span>01</span><p>Where academic thinking meets applied technology.</p></div>
   </div>;
